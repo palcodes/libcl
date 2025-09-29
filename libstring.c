@@ -3,9 +3,9 @@
  * Description: Collection of string related function reimplemenatations.
  */
 
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 typedef unsigned char byte;
 
@@ -13,12 +13,13 @@ typedef unsigned char byte;
 unsigned long lenstr(const char *__s);
 char *cpystr(char *dest, const char *src);
 char *tokenstr(char *str, const char *delim);
+char *catstr(char *dest, const char *src);
 
 // Runner code
 int main() {
-  char str[] = "hello,, world!";
-  char alp[] = "A,B,C";
-  char *tok = tokenstr(str, ",!");
+  char *str = "hello, world!";
+  char *alp = "A,B,C";
+  // char *tok = tokenstr(str, ",!");
 
   // char *str2 = (char *)malloc(lenstr(str) + 1);
   // char *s = cpystr(str2, str);
@@ -27,10 +28,14 @@ int main() {
   // printf("Test o/p for curr function:\t%s\n", s);
   // printf("Printing out byte info:\t\t%p\n", &__x);
 
-  while (tok != NULL) {
-    printf("%s\n", tok);
-    tok = tokenstr(NULL, ",!");
-  }
+  char *ds = catstr(str, alp);
+
+  // while (tok != NULL) {
+  //   printf("%s\n", tok);
+  //   tok = tokenstr(NULL, ",!");
+  // }
+
+  printf("Concatenated string: %s\n", ds);
 
   // free(str2);
   return 0;
@@ -64,9 +69,9 @@ char *cpystr(char *dest, const char *src) {
 }
 
 // Tokenizes the provided string by using the delimiters.
-// Parse "str" into tokens separated by characters in "delim". ( definition from
+// Parse str into tokens separated by characters in delim. ( definition from
 // libc )
-// If "str" is NULL, then the last string tokenstr() was called with is used.
+// If str is NULL, then the last string tokenstr() was called with is used.
 char *tokenstr(char *str, const char *delim) {
   static char *cursor; // keep track of progress
   char *start;
@@ -95,4 +100,25 @@ char *tokenstr(char *str, const char *delim) {
   }
   cursor = NULL;
   return start;
+}
+
+// Appends the string pointed to, by src to the end of the string pointed to by
+// dest.
+char *catstr(char *dest, const char *src) {
+  size_t len_dest = lenstr(dest);
+  size_t len_src = lenstr(src);
+  size_t len_new = len_dest + len_src + 1;
+
+  char *new_dest = malloc(len_new);
+  cpystr(new_dest, dest);
+
+  char *p = new_dest + len_dest;
+  const char *q = src;
+
+  while (*q) {
+    *p++ = *q++;
+  }
+  *p = '\0';
+
+  return new_dest;
 }
