@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef unsigned char byte;
 
@@ -14,11 +15,14 @@ unsigned long lenstr(const char *__s);
 char *cpystr(char *dest, const char *src);
 char *tokenstr(char *str, const char *delim);
 char *catstr(char *dest, const char *src);
+int cmpstr(const char *s1, const char *s2);
 
 // Runner code
 int main() {
   char *str = "hello, world!";
   char *alp = "A,B,C";
+  char *car = "porche";
+  char buffer[80];
   // char *tok = tokenstr(str, ",!");
 
   // char *str2 = (char *)malloc(lenstr(str) + 1);
@@ -28,14 +32,20 @@ int main() {
   // printf("Test o/p for curr function:\t%s\n", s);
   // printf("Printing out byte info:\t\t%p\n", &__x);
 
-  char *ds = catstr(str, alp);
+  // char *ds = catstr(str, alp);
 
   // while (tok != NULL) {
   //   printf("%s\n", tok);
   //   tok = tokenstr(NULL, ",!");
   // }
 
-  printf("Concatenated string: %s\n", ds);
+  do {
+    printf("Guess my favorite car: ");
+    fflush(stdout);
+    scanf("%79s", buffer);
+  } while (cmpstr(car, buffer) != 0);
+
+  // printf("Concatenated string: %s\n", ds);
 
   // free(str2);
   return 0;
@@ -121,4 +131,14 @@ char *catstr(char *dest, const char *src) {
   *p = '\0';
 
   return new_dest;
+}
+
+// Compares two strings character by character.
+int cmpstr(const char *s1, const char *s2) {
+  while ((*s1 && *s2) && (*s1 == *s2)) {
+    s1++;
+    s2++;
+  }
+
+  return *s1 - *s2;
 }
